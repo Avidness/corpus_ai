@@ -1,14 +1,12 @@
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from app.pipeline.write_a_book import generate_book
-from app.pipeline.read_a_book import process_book
-from app.models.write.user_input import UserInput
+from app.models.user_input import UserInput
 from dotenv import load_dotenv
 import os
 from pathlib import Path
 import logging
-from app.utils.file_utils import extract_file_content
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -37,11 +35,6 @@ async def startup_event():
         file.unlink()
     
     logger.info("Startup tasks completed")
-
-@app.post("/read_a_book")
-async def read_a_book(file: UploadFile = File(...)):
-    result = await extract_file_content(file)
-    return StreamingResponse(process_book(result), media_type="text/event-stream")
 
 @app.post("/write_a_book")
 async def write_a_book(input_data: UserInput):

@@ -7,7 +7,7 @@ import FileUpload from './FileUpload';
 
 const MainChat = ({ streamData, isStreaming, fetchStream }) => {
   const handleSendMessage = (message) => {
-    fetchStream('send_input', { 'user_input': message });
+    fetchStream('write_a_book', { 'user_input': message });
   };
 
   return (
