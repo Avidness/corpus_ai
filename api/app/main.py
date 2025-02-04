@@ -5,7 +5,6 @@ from app.pipeline.write_a_book import generate_book
 from app.models.user_input import UserInput
 from dotenv import load_dotenv
 import os
-from pathlib import Path
 import logging
 
 logging.basicConfig(level=logging.DEBUG)
@@ -20,9 +19,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-UPLOAD_DIR = Path("uploads")
-UPLOAD_DIR.mkdir(exist_ok=True)
-
 @app.on_event("startup")
 async def startup_event():
     logger.info("Application is starting...")
@@ -30,9 +26,6 @@ async def startup_event():
     load_dotenv()
     openai_key = os.getenv('OPENAI_API_KEY')
     os.environ["OPENAI_API_KEY"] = openai_key
-    
-    for file in UPLOAD_DIR.glob("*"):
-        file.unlink()
     
     logger.info("Startup tasks completed")
 
